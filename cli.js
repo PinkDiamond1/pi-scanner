@@ -4,10 +4,9 @@
  * Pi Scanner CLI
  *
  * Provides interfaces for:
- * - scanning a complete index for a given sequence of digits
- * - retrieving the string of digits between two given positions in the
- *  digitsFile
- * - and building indexes from a directory of digit text files
+ * - scanning a complete index for a given sequence of digits,
+ * - retrieving a given range of digits from the digitsFile,
+ * - and building indexes from a directory of digit text files.
  */
 
 'use strict'
@@ -40,7 +39,7 @@ var tasks = {
 
   scan_indexes: function(query, digitsFile, indexDir) {
     var t0 = new Date().getTime()
-    piIndexScanner.searchPiFor(query, indexDir, digitsFile, function(result) {
+    piIndexScanner.scanPiFor(query, indexDir, digitsFile, function(result) {
       console.log("Scanning indexes for sequence " + query);
       var td = (new Date().getTime() - t0) / 1000;
       if (result > -1) {
@@ -133,6 +132,11 @@ switch (command) {
     indexDir = (indexDir[indexDir.length-1] === '/' ? indexDir : indexDir + '/');
     digitsFile = (process.argv[5] || defaults.digitsFile);
 
+    if (!fs.existsSync(digitsDir + "pi-0001.txt")) {
+      console.log('Error: Provided digits directory appears invalid');
+      break;
+    }
+
     // delete digitsFile if it exists
     if (fs.existsSync(digitsFile)) {
       fs.unlinkSync(digitsFile);
@@ -143,11 +147,6 @@ switch (command) {
       if (fs.existsSync(indexDir + String(i))) {
         fs.unlinkSync(indexDir + String(i));
       }
-    }
-
-    if (!fs.existsSync(digitsDir + "pi-0001.txt")) {
-      console.log('Error: Provided digits directory appears invalid');
-      break;
     }
 
     tasks.build_indexes(digitsDir, digitsFile, indexDir);
