@@ -22,6 +22,8 @@ get, or like so to build the indexes in a default setup from within the project
 directory:
 
     $ ./cli.js index
+    Indexed 10 input files in 291.182 seconds.
+    Wrote out 1000000000 digits in 291.172 seconds.
 
 Querying the indexes with the CLI to locate a given sequence within pi:
 
