@@ -3,15 +3,20 @@
 /*
  * Pi Scanner CLI
  *
+ * Provides interfaces for:
+ * - scanning a complete index for a given sequence of digits
+ * - retrieving the string of digits between two given positions in the
+ *  digitsFile
+ * - and building indexes from a directory of digit text files
  */
 
 'use strict'
 
 var fs = require('fs');
-var piIndexScan = require('./lib/indexScanner.js');
+var piIndexScanner = require('./lib/indexScanner.js');
 var piIndexBuilder = require('./lib/indexBuilder.js');
 
-var defaults, command, query, digitsDir, digitsFile, indexDir;
+var defaults, command, query, start, end, digitsDir, digitsFile, indexDir;
 
 var tasks = {
   print_help: function() {
@@ -20,6 +25,8 @@ var tasks = {
     console.log(
       "\n  USAGE:" +
       "\n    " + exec_name + " scan <digit string to search for> <optional: digit index directory> <optional: digits file>" +
+      "\n   OR:" +
+      "\n    " + exec_name + " range <inital decimal place>:<final decmial place> <optional: digits file>" +
       "\n   OR:" +
       "\n    " + exec_name + " index <optional: directory of digits text files> <optional: digit index directory> <optional: digits file>" +
       "\n" +
@@ -33,7 +40,7 @@ var tasks = {
 
   scan_indexes: function(query, digitsFile, indexDir) {
     var t0 = new Date().getTime()
-    piIndexScan.searchPiFor(query, indexDir, digitsFile, function(result) {
+    piIndexScanner.searchPiFor(query, indexDir, digitsFile, function(result) {
       console.log("Scanning indexes for sequence " + query);
       var td = (new Date().getTime() - t0) / 1000;
       if (result > -1) {
@@ -48,6 +55,12 @@ var tasks = {
   build_indexes: function(digitsDir, digitsFile, indexDir) {
     piIndexBuilder.buildDigitIndexes(digitsDir, indexDir);
     piIndexBuilder.buildDigitsFile(digitsDir, digitsFile);
+  },
+
+  print_range: function(start, end, digitsFile) {
+    piIndexScanner.digitRange(start, end, digitsFile, function(digits) {
+      console.log(digits);
+    });
   }
 }
 
@@ -60,6 +73,37 @@ defaults = {
 command = process.argv[2];
 
 switch (command) {
+  case 'range':
+    query = process.argv[3];
+    indexDir = (process.argv[4] || defaults.indexDir);
+    indexDir = (indexDir[indexDir.length-1] === '/' ? indexDir : indexDir + '/');
+    digitsFile = (process.argv[5] || defaults.digitsFile);
+
+    if (!fs.existsSync(indexDir + "0")) {
+      console.log('Error: Provided index directory appears invalid');
+      break;
+    } else if (!fs.existsSync(digitsFile)) {
+      console.log('Error: Provided digits file doesn\'t exist');
+      break;
+    }
+
+    if (!query) {
+      tasks.print_help();
+      break;
+    }
+
+    query = query.split(':');
+    start = parseInt(query[0]);
+    end = parseInt(query[1]);
+
+    if (query.length !== 2 || !(start > -1 && end > -1) || end <= start || end > fs.statSync(digitsFile).size) {
+      tasks.print_help();
+      break;
+    }
+
+    tasks.print_range(start, end, digitsFile, indexDir);
+    break;
+
   case 'scan':
     query = process.argv[3];
     indexDir = (process.argv[4] || defaults.indexDir);
