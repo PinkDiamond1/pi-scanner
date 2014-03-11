@@ -3,9 +3,16 @@
 #
 # Created by Nat Noordanus on 2013-12-13.
 
+# This script was used to determine that the first occurance of two consecutive
+# occurrences of the same digit in base ten Pi with more than 255 decimal places
+# between them is after at least 3.254 trillion digits. This question was
+# motivated to determine the feasibility of representing the locations of digits
+# of pi as the number of decimal places since the last occrance of the same
+# digit, as a single 8 bit byte.
+
 # Description:
-# Analyses the first 100 billion digits of pi to determine the greatest number
-#  of decimal places separating consecutive occurrences of the same digit.
+# Analyses the  digits of pi to determine the greatest number of decimal places
+# separating consecutive occurrences of the same digit.
 # The purpose is to discover the first gap of more than 255 decimal places
 #  between consecutive occurrences of a base 10 digit in pi.
 # Downloads segments of 100 000 000 digits at a time as zipped text files from
@@ -23,7 +30,7 @@
 require 'json'
 
 # Analyses up to 6 trillian digits of Pi to determine the maximum distance
-#  between consecutive occurances of the same digit for each base 10 digit.
+#  between consecutive occurrences of the same digit for each base 10 digit.
 #
 # @param start [Integer] of segement (up of 100million) to start on.
 #
