@@ -78,7 +78,7 @@ http.createServer(function (req, res) {
         query = parseInt(path[2], 10);
 
         if (path.length === 3 && query > -1) {
-          log('Recieved request ' + req.url);
+          log('Recieved request from: ' + req.connection.remoteAddress + ' for: '+ req.url);
           res.writeHead(200, {'Content-Type': 'application/json'});
 
           var t0 = new Date().getTime();
@@ -112,7 +112,7 @@ http.createServer(function (req, res) {
         start = parseInt(query[0], 10);
         end = parseInt(query[1], 10);
 
-        res.writeHead(200, {'Content-Type': 'application/json'});
+        log('Recieved request from:' + req.connection.remoteAddress + ' for: '+ req.url);
 
         if (path.length !== 3 || query.length !== 2) {
           canned_responses.malformed_query(res, req);
@@ -121,6 +121,7 @@ http.createServer(function (req, res) {
         } else if (end - start > 1000) { // requests for more that 1000 digits are forbidden
           canned_responses.too_many_digits(res, req);
         } else {
+          res.writeHead(200, {'Content-Type': 'application/json'});
           var t0 = new Date().getTime();
           piIndexScanner.digitRange(start, end, digitsFile, function(digits) {
             var td = (new Date().getTime() - t0) / 1000;
