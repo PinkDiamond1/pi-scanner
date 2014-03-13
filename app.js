@@ -40,7 +40,7 @@ var canned_responses = {
     res.writeHead(403, {'Content-Type': 'application/json'});
     res.end(JSON.stringify({
       'status': 'Error 403',
-      'message': 'Too many digits requested, max range is 1000.'
+      'message': 'Too many digits requested, max range is 10000.'
     }));
     log('Rejected request ' + req.method + ' : ' + req.url);
   },
@@ -65,7 +65,11 @@ var canned_responses = {
 
   serve_pages: function(res, req) {
     var file_path, fileStat, file, mimeType;
-    file_path = "./www" + req.url;
+    if (req.url === '' || req.url === '/') {
+      file_path = "./www/index.html";
+    } else {
+      file_path = "./www" + req.url;
+    }
     if (fs.existsSync(file_path)) {
       fileStat = fs.lstatSync(file_path);
       if (fileStat.isFile(file_path)) {
@@ -150,7 +154,7 @@ http.createServer(function (req, res) {
           canned_responses.malformed_query(res, req);
         } else if (start < 0 || end <= start || end > fs.statSync(digitsFile).size) {
           canned_responses.bad_range(res, req);
-        } else if (end - start > 1000) { // requests for more that 1000 digits are forbidden
+        } else if (end - start > 10000) { // requests for more that 10000 digits are forbidden
           canned_responses.too_many_digits(res, req);
         } else {
           res.writeHead(200, {'Content-Type': 'application/json'});

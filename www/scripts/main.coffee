@@ -38,6 +38,6 @@ angular.module('piScanner', [])
         when 422
           $scope.response.range_error = 'Invalid range: the end position needs to be after the start position, and they both need to be position'
         when 403
-          $scope.response.range_error = 'Sorry, you can only request up to 1000 digits at a time'
+          $scope.response.range_error = 'Sorry, you can only request up to 10000 digits at a time'
         else
           $scope.response.range_error = 'Uh oh, something went wrong, might have been an issue with the server'
