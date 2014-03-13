@@ -61,9 +61,41 @@ var canned_responses = {
       'message': 'Invalid request.'
     }));
     log('Rejected request ' + req.method + ' : ' + req.url);
+  },
+
+  serve_pages: function(res, req) {
+    var file_path, fileStat, file, mimeType;
+    file_path = "./www" + req.url;
+    if (fs.existsSync(file_path)) {
+      fileStat = fs.lstatSync(file_path);
+      if (fileStat.isFile(file_path)) {
+        switch (file_path.split('.').slice(-1).pop()) {
+          case 'html':
+            mimeType = 'text/html';
+            break;
+          case 'js':
+            mimeType = 'application/javascript';
+            break;
+          case 'css':
+            mimeType = 'text/css';
+            break;
+          default:     mimeType = 'text/plain';
+        }
+
+        file = fs.readFileSync(file_path);
+        res.writeHead(200, {'Content-Type': mimeType});
+        res.end(file);
+      } else if (fileStat.isDirectory()) {
+        res.writeHead(403, {'Content-Type': 'text/plain'});
+        res.end("403: What are you playing at?");
+      } else {
+        this.nothing_here(res, req);
+      }
+    } else {
+      this.nothing_here(res, req);
+    }
   }
 }
-
 
 
 
@@ -136,7 +168,7 @@ http.createServer(function (req, res) {
         break;
 
       default:
-        canned_responses.nothing_here(res, req);
+        canned_responses.serve_pages(res, req);
     }
 
   } else {
