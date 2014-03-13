@@ -10,10 +10,14 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
         <link rel="stylesheet" href="styles/normalize.css">
         <link rel="stylesheet" href="styles/main.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="styles/app.css">
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
         <script src="scripts/vendor/modernizr-2.6.2.min.js"></script>
     </head>
     <body>
@@ -21,11 +25,65 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <!-- Add your site or application content here -->
-        <p>Hello world! This is HTML5 Boilerplate.</p>
+        <div class="container" ng-app="piScanner">
+          <div class="page-header">
+            <h1>PiScanner</h1>
+          </div>
+          <br>
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <h4>Scanning the first 10 billions digits of pi in pure JavaScript.</h4>
+              <p>Find the first occurance of your birthday in Pi, satisfy your curiosity about the 52134234th digit of Pi, create password mnemonics based on obscure properties of mathematical constants! Hours of fun and utility!</p>
+              <p>
+                <a href="https://github.com/nat-n/pi-scanner">Fork me on GitHub <i class="fa fa-github"></i></a>
+              </p>
+            </div>
+          </div>
+          <div ng-controller="mainCtrl">
+            <div class="row">
+              <form name="scanForm" ng-submit="scan()">
+                <div class="col-xs-12 col-sm-3"><label>Scan Pi for a sequence of digits</label></div>
+                <div class="col-xs-8 col-sm-6">
+                  <input type="text" class="form-control" name="squence" ng-model="query.sequence" placeholder="digits">
+                </div>
+                <div class="col-xs-3">
+                  <input type="submit" class="btn btn-primary" value="Scan Pi">
+                </div>
+              </form>
+            </div>
+            <br>
+            <div class="alert alert-danger" ng-show="response.scan_error" ng-bind="response.scan_error"></div>
+            <div class="row" ng-show="response.scan">
+              <div class="well" ng-show="response.scan.status=='not found'"><p>The sequence {{response.scan.query}} does not appear in the first 10 billion digits of pi. Scan time: {{response.scan.time}} seconds.</p></div>
+              <div class="well" ng-show="response.scan.status=='success'"><p>The sequence {{response.scan.query}} was found in Pi after <strong>{{response.scan.result}}</strong> decimal places. Scan time: {{response.scan.time}} seconds.</p></div>
+            </div>
+            <br>
+            <form name="rangeForm" ng-submit="range()">
+              <div class="row">
+                <div class="col-xs-12 col-sm-3"><label>View digits of Pi within a range</label></div>
+                <div class="col-xs-4 col-sm-3">
+                  <input type="text" class="form-control" ng-model="query.range_start" placeholder="start position">
+                </div>
+                <div class="col-xs-4 col-sm-3">
+                  <input type="text" class="form-control" ng-model="query.range_end" placeholder="end position">
+                </div>
+                <div class="col-xs-3">
+                  <input type="submit" class="btn btn-primary" value="Get digits of Pi">
+                </div>
+              </div>
+            </form>
+            <br>
+            <div class="alert alert-danger" ng-show="response.range_error" ng-bind="response.range_error"></div>
+            <div class="row" ng-show="response.range">
+              <div class="well"><h5>Digits of Pi from {{response.range.start}} to  {{response.range.end}} decimal places:</h5><p ng-bind="response.range.result" style="word-wrap:break-word;"></p></div>
+            </div>
+          </div>
+        </div>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
         <script src="scripts/plugins.js"></script>
         <script src="scripts/main.js"></script>
 
