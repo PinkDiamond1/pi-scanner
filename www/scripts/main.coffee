@@ -23,7 +23,7 @@ angular.module('piScanner', [])
     req.then (data, status, headers, config) ->
       $scope.response.scan = data.data
     req.error (data, status, headers, config) ->
-      $scope.response.range_error = 'Uh oh, something went wrong, might have been an issue with the server'
+      $scope.response.scan_error = 'Uh oh, something went wrong, might have been an issue with the server'
 
   $scope.range = () ->
     $scope.response.range = null
