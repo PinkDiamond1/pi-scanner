@@ -4,13 +4,13 @@
 
 var http = require('http');
 var fs = require('fs');
-var piIndexScanner = require('./lib/indexScanner.js');
+var piIndexScanner = require(__dirname + '/lib/indexScanner.js');
 
 var portNumber = 31415;
 
-var indexDir = (process.argv[2] || "./index/");
+var indexDir = (process.argv[2] || __dirname + "/index/");
 indexDir = (indexDir[indexDir.length-1] === '/' ? indexDir : indexDir + '/');
-var digitsFile = (process.argv[3] || "./pi-digits");
+var digitsFile = (process.argv[3] || __dirname + "/pi-digits");
 
 var log = function(message) {
   fs.appendFile('log.txt', (new Date()).toGMTString() + ' : ' + message + '\n');
@@ -67,9 +67,9 @@ var canned_responses = {
   serve_pages: function(res, req) {
     var file_path, fileStat, file, mimeType;
     if (req.url === '' || req.url === '/') {
-      file_path = "./www/index.html";
+      file_path = __dirname + "/www/index.html";
     } else {
-      file_path = "./www" + req.url;
+      file_path = __dirname + "/www" + req.url;
     }
     if (fs.existsSync(file_path)) {
       fileStat = fs.lstatSync(file_path);
