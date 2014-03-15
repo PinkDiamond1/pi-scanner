@@ -13,7 +13,7 @@ indexDir = (indexDir[indexDir.length-1] === '/' ? indexDir : indexDir + '/');
 var digitsFile = (process.argv[3] || "./pi-digits");
 
 var log = function(message) {
-  fs.appendFile('app_log.txt', (new Date()).toGMTString() + ' : ' + message);
+  fs.appendFile('log.txt', (new Date()).toGMTString() + ' : ' + message + '\n');
   console.log((new Date()).toGMTString() + ' : ' + message);
 };
 
