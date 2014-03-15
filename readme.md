@@ -1,6 +1,6 @@
 # PiScanner
 
-A nodejs app for finding arbitrary sequences of decimal digits in Pi.
+A nodejs app for finding arbitrary sequences of decimal digits in Pi. [Demo](http://piscanner.natn.io/)
 
 
 ## Why?
