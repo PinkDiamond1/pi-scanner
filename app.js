@@ -183,7 +183,7 @@ http.createServer(function (req, res) {
   }
 }).listen(portNumber);
 
-log('Launched app);
+log('Launched app');
 
 
 console.log('Started web server on port ' + portNumber + ', on ' + (new Date()).toGMTString());
