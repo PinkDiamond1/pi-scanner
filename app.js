@@ -183,6 +183,9 @@ http.createServer(function (req, res) {
   }
 }).listen(portNumber);
 
+log('Launched app);
+
+
 console.log('Started web server on port ' + portNumber + ', on ' + (new Date()).toGMTString());
 console.log('Accepting requests like http://127.0.0.1:' + portNumber + '/find/1415');
 console.log(' Or like http://127.0.0.1:' + portNumber + '/range/100:200');
