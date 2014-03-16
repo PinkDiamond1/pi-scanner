@@ -64,7 +64,7 @@ var canned_responses = {
     log('Rejected request ' + req.method + ' : ' + req.url);
   },
 
-  serve_pages: function(res, req) {
+  serve_asset: function(res, req) {
     var file_path, fileStat, file, mimeType;
     if (req.url === '' || req.url === '/') {
       file_path = __dirname + "/www/index.html";
@@ -174,7 +174,7 @@ http.createServer(function (req, res) {
         break;
 
       default:
-        canned_responses.serve_pages(res, req);
+        canned_responses.serve_asset(res, req);
     }
 
   } else {
