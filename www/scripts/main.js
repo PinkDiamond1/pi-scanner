@@ -84,11 +84,15 @@
       }
     });
     $scope.scan = function() {
-      var req;
+      var query, req;
       $scope.response.scan = null;
       $scope.response.scan_error = '';
       $scope.state.scan_active = true;
-      req = $http.get("/find/" + ($scope.query.sequence.replace(/\s/g, '')));
+      query = $scope.query.sequence.replace(/\s/g, '');
+      if (!query.length) {
+        return;
+      }
+      req = $http.get("/find/" + query);
       req.then(function(data, status, headers, config) {
         $scope.state.scan_active = false;
         return $scope.response.scan = data.data;
@@ -104,11 +108,19 @@
       });
     };
     return $scope.range = function() {
-      var req;
+      var query_end, query_start, req;
       $scope.response.range = null;
       $scope.response.range_error = null;
       $scope.state.range_active = true;
-      req = $http.get("/range/" + $scope.query.range_start + ":" + $scope.query.range_end);
+      query_start = String($scope.query.range_start).replace(/\s/g, '');
+      query_end = String($scope.query.range_end).replace(/\s/g, '');
+      if (!query_start.length) {
+        $scope.query.range_start = query_start = 0;
+      }
+      if (!query_end.length) {
+        $scope.query.range_end = query_end = query_start + 10000;
+      }
+      req = $http.get("/range/" + query_start + ":" + query_end);
       req.then(function(data, status, headers, config) {
         $scope.state.range_active = false;
         $scope.response.range = data.data;

@@ -146,15 +146,17 @@ http.createServer(function (req, res) {
         break;
 
       case 'range':
-        query = path[2].split(':');
-        start = parseInt(query[0], 10);
-        end = parseInt(query[1], 10);
-
         log('Recieved request from:' + req.connection.remoteAddress + ' for: '+ req.url);
 
-        if (path.length !== 3 || query.length !== 2) {
+        query = /^(\d+):(\d+)$/.exec(path[2]);
+        if (path.length !== 3 || !query) {
           canned_responses.malformed_query(res, req);
-        } else if (start < 0 || end <= start || end > fs.statSync(digitsFile).size) {
+        } else {
+          start = parseInt(query[1]);
+          end = parseInt(query[2]);
+        }
+
+        if (start < 0 || end <= start || end > fs.statSync(digitsFile).size) {
           canned_responses.bad_range(res, req);
         } else if (end - start > 100000) { // requests for more that 100000 digits are forbidden
           canned_responses.too_many_digits(res, req);
@@ -165,7 +167,7 @@ http.createServer(function (req, res) {
             var td = (new Date().getTime() - t0) / 1000;
             res.end(JSON.stringify({
               status: 'success',
-              query: query,
+              query: [start, end],
               result: digits,
               time: td
             }));

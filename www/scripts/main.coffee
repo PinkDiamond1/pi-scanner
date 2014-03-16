@@ -73,7 +73,11 @@ angular.module('piScanner', [])
     $scope.response.scan= null
     $scope.response.scan_error = ''
     $scope.state.scan_active = true
-    req = $http.get("/find/#{$scope.query.sequence.replace(/\s/g, '')}")
+
+    query = $scope.query.sequence.replace(/\s/g, '')
+    return unless query.length
+
+    req = $http.get("/find/#{query}")
     req.then (data, status, headers, config) ->
       $scope.state.scan_active = false
       $scope.response.scan = data.data
@@ -89,7 +93,15 @@ angular.module('piScanner', [])
     $scope.response.range = null
     $scope.response.range_error = null
     $scope.state.range_active = true
-    req = $http.get("/range/#{$scope.query.range_start}:#{$scope.query.range_end}")
+
+    query_start = String($scope.query.range_start).replace(/\s/g, '')
+    query_end = String($scope.query.range_end).replace(/\s/g, '')
+    unless query_start.length
+      $scope.query.range_start = query_start = 0
+    unless query_end.length
+      $scope.query.range_end = query_end = query_start + 10000
+
+    req = $http.get("/range/#{query_start}:#{query_end}")
     req.then (data, status, headers, config) ->
       $scope.state.range_active = false
       $scope.response.range = data.data
