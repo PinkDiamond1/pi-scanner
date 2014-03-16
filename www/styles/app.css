@@ -1,9 +1,6 @@
 @media (min-width: 0px) {
   .xs-pull-right {
-    float: right;
-  }
+    float: right; } }
 @media (min-width: 768px) {
   .sm-pull-left {
-    float: left;
-  }
-}
+    float: left; } }
