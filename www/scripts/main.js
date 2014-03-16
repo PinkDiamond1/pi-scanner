@@ -17,12 +17,17 @@
       var req;
       $scope.response.scan = null;
       $scope.response.scan_error = '';
-      req = $http.get("/find/" + $scope.query.sequence);
+      req = $http.get("/find/" + ($scope.query.sequence.replace(/\s/g, '')));
       req.then(function(data, status, headers, config) {
         return $scope.response.scan = data.data;
       });
       return req.error(function(data, status, headers, config) {
-        return $scope.response.range_error = 'Uh oh, something went wrong, might have been an issue with the server';
+        switch (status) {
+          case 400:
+            return $scope.response.scan_error = 'I can\'t scan for that! Digits only please.';
+          default:
+            return $scope.response.scan_error = 'Uh oh, something went wrong, might have been an issue with the server, like it might be trying to deal with too many requests right now.';
+        }
       });
     };
     return $scope.range = function() {
@@ -40,7 +45,7 @@
           case 422:
             return $scope.response.range_error = 'Invalid range: the end position needs to be after the start position, and they both need to be position';
           case 403:
-            return $scope.response.range_error = 'Sorry, you can only request up to 1000 digits at a time';
+            return $scope.response.range_error = 'Sorry, you can only request up to 100000 digits at a time';
           default:
             return $scope.response.range_error = 'Uh oh, something went wrong, might have been an issue with the server';
         }

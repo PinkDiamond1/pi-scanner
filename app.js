@@ -112,9 +112,10 @@ http.createServer(function (req, res) {
 
     switch (path[1]) {
       case 'find':
-        query = /^\s*(\d+)\s*$/.exec(path[2]);
+        query = /^\d+$/.exec(path[2]);
 
         if (path.length === 3 && query) {
+          query = query[0]
           log('Recieved request from: ' + req.connection.remoteAddress + ' for: '+ req.url);
           res.writeHead(200, {'Content-Type': 'application/json'});
 

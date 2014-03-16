@@ -19,11 +19,15 @@ angular.module('piScanner', [])
   $scope.scan = () ->
     $scope.response.scan= null
     $scope.response.scan_error = ''
-    req = $http.get("/find/#{$scope.query.sequence}")
+    req = $http.get("/find/#{$scope.query.sequence.replace(/\s/g, '')}")
     req.then (data, status, headers, config) ->
       $scope.response.scan = data.data
     req.error (data, status, headers, config) ->
-      $scope.response.scan_error = 'Uh oh, something went wrong, might have been an issue with the server'
+      switch status
+        when 400
+          $scope.response.scan_error = 'I can\'t scan for that! Digits only please.'
+        else
+          $scope.response.scan_error = 'Uh oh, something went wrong, might have been an issue with the server, like it might be trying to deal with too many requests just now.'
 
   $scope.range = () ->
     $scope.response.range = null
