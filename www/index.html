@@ -46,16 +46,24 @@
                 <div class="col-xs-12 col-sm-6">
                   <input type="text" class="form-control" name="squence" ng-model="query.sequence" placeholder="digits">
                 </div>
-                <div class="col-xs-12 col-sm-3">
-                  <input type="submit" class="btn btn-primary xs-pull-right sm-pull-left" value="Scan Pi">
+                <div class="col-xs-12 col-sm-3" id="scan-spinner">
+                  <input type="submit"  ng-disabled="state.scan_active" class="btn btn-primary xs-pull-right sm-pull-left" value="Scan Pi">
                 </div>
               </form>
             </div>
             <br>
             <div class="alert alert-danger" ng-show="response.scan_error" ng-bind="response.scan_error"></div>
             <div class="row" ng-show="response.scan">
-              <div class="well col-xs-12" ng-show="response.scan.status=='not found'"><p>The sequence {{response.scan.query}} does not appear in the first 10 billion digits of pi. Scan time: {{response.scan.time}} seconds.</p></div>
-              <div class="well col-xs-12" ng-show="response.scan.status=='success'"><p>The sequence {{response.scan.query}} was found in Pi after <strong>{{response.scan.result}}</strong> decimal places. Scan time: {{response.scan.time}} seconds.</p></div>
+              <div class="col-xs-12">
+                <div class="well" ng-show="response.scan.status=='not found'">
+                  <p>The sequence {{response.scan.query}} does not appear in the first 10 billion digits of pi. Scan time: {{response.scan.time}} seconds.</p>
+                </div>
+              </div>
+              <div class="col-xs-12">
+                <div class="well" ng-show="response.scan.status=='success'">
+                  <p>The sequence {{response.scan.query}} was found in Pi after <strong>{{response.scan.result}}</strong> decimal places. Scan time: {{response.scan.time}} seconds.</p>
+                </div>
+              </div>
             </div>
             <br>
             <form name="rangeForm" ng-submit="range()">
@@ -67,15 +75,19 @@
                 <div class="col-xs-6 col-sm-3">
                   <input type="text" class="form-control" ng-model="query.range_end" placeholder="end position">
                 </div>
-                <div class="col-xs-12 col-sm-3">
-                  <input type="submit" class="btn btn-primary xs-pull-right sm-pull-left" value="Get digits of Pi">
+                <div class="col-xs-12 col-sm-3" id="range-spinner">
+                  <input type="submit" ng-disabled="state.range_active" class="btn btn-primary xs-pull-right sm-pull-left" value="Get digits of Pi">
                 </div>
               </div>
             </form>
             <br>
             <div class="alert alert-danger" ng-show="response.range_error" ng-bind="response.range_error"></div>
             <div class="row" ng-show="response.range">
-              <div class="well col-xs-12"><h5>Digits of Pi from {{response.range.start}} to  {{response.range.end}} decimal places:</h5><p ng-bind="response.range.result" style="word-wrap:break-word;"></p></div>
+              <div class="col-xs-12">
+                <div class="well col-xs-12">
+                  <h5>Digits of Pi from {{response.range.start}} to  {{response.range.end}} decimal places:</h5><p ng-bind="response.range.result" style="word-wrap:break-word;"></p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -86,6 +98,7 @@
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
         <script src="scripts/plugins.js"></script>
         <script src="scripts/main.js"></script>
+        <script src="//fgnass.github.io/spin.js/spin.min.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
