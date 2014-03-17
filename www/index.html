@@ -52,8 +52,8 @@
               </form>
             </div>
             <br>
-            <div class="alert alert-danger" ng-show="response.scan_error" ng-bind="response.scan_error"></div>
-            <div class="row" ng-show="response.scan">
+            <div class="alert alert-danger ng-hide" ng-show="response.scan_error" ng-bind="response.scan_error"></div>
+            <div class="row ng-hide" ng-show="response.scan">
               <div class="col-xs-12">
                 <div class="well" ng-show="response.scan.status=='not found'">
                   <p>The sequence {{response.scan.query}} does not appear in the first 10 billion digits of pi. Scan time: {{response.scan.time}} seconds.</p>
@@ -81,8 +81,8 @@
               </div>
             </form>
             <br>
-            <div class="alert alert-danger" ng-show="response.range_error" ng-bind="response.range_error"></div>
-            <div class="row" ng-show="response.range">
+            <div class="alert alert-danger ng-hide" ng-show="response.range_error" ng-bind="response.range_error"></div>
+            <div class="row ng-hide" ng-show="response.range">
               <div class="col-xs-12">
                 <div class="well col-xs-12">
                   <h5>Digits of Pi from {{response.range.start}} to  {{response.range.end}} decimal places:</h5><p ng-bind="response.range.result" style="word-wrap:break-word;"></p>
