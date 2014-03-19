@@ -70,12 +70,12 @@ angular.module('piScanner', [])
       spinner.stop('range')
 
   $scope.scan = () ->
-    $scope.response.scan= null
+    $scope.response.scan = null
     $scope.response.scan_error = ''
-    $scope.state.scan_active = true
 
     query = $scope.query.sequence.replace(/\s/g, '')
     return unless query.length
+    $scope.state.scan_active = true
 
     req = $http.get("/find/#{query}")
     req.then (data, status, headers, config) ->
