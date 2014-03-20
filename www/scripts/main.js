@@ -87,11 +87,11 @@
       var query, req;
       $scope.response.scan = null;
       $scope.response.scan_error = '';
-      $scope.state.scan_active = true;
       query = $scope.query.sequence.replace(/\s/g, '');
       if (!query.length) {
         return;
       }
+      $scope.state.scan_active = true;
       req = $http.get("/find/" + query);
       req.then(function(data, status, headers, config) {
         $scope.state.scan_active = false;
